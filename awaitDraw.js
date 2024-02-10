@@ -12,13 +12,17 @@ function luckyDraw(player) {
   });
 }
 
-const players = ["Joe", "Caroline", "Sabrina"];
+async function getResults() {
+  const players = ["Tina", "Jorge", "Julien"];
 
-let promiseChain = Promise.resolve();
+  for (const player of players) {
+    try {
+      const result = await luckyDraw(player);
+      console.log(result);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+}
 
-players.forEach((player) => {
-  promiseChain = promiseChain
-    .then(() => luckyDraw(player))
-    .then((result) => console.log(result))
-    .catch((error) => console.error(error.message));
-});
+getResults();
