@@ -20,10 +20,6 @@ let planets: { id: number; name: string }[] = [
   },
 ];
 
-app.get("/planets", (req, res) => {
-  res.json(planets);
-});
-
 // Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
