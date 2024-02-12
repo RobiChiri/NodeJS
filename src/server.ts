@@ -1,27 +1,54 @@
 import express from "express";
-import dotenv from "dotenv";
-import morgan from "morgan";
-import "express-async-errors";
 
-dotenv.config();
-
-const app = express();
-
-app.use(morgan("dev"));
+const router = express.Router();
 
 let planets: { id: number; name: string }[] = [
-  {
-    id: 1,
-    name: "Earth",
-  },
-  {
-    id: 2,
-    name: "Mars",
-  },
+  { id: 1, name: "Earth" },
+  { id: 2, name: "Mars" },
 ];
 
-// Start the server
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+router.get("/api/planets", (req, res) => {
+  res.json(planets);
+});
+
+router.get("/api/planets/:id", (req, res) => {
+  const planet = planets.find(
+    (planet) => planet.id === parseInt(req.params.id)
+  );
+  if (!planet) {
+    return res.status(404).json({ msg: "Planet not found" });
+  }
+  res.json(planet);
+});
+
+router.post("/api/planets", (req, res) => {
+  const newPlanet = {
+    id: planets.length + 1,
+    name: req.body.name,
+  };
+  planets.push(newPlanet);
+  res.status(201).json({ msg: "Planet created" });
+});
+
+router.put("/api/planets/:id", (req, res) => {
+  const planet = planets.find(
+    (planet) => planet.id === parseInt(req.params.id)
+  );
+  if (!planet) {
+    return res.status(404).json({ msg: "Planet not found" });
+  }
+  planet.name = req.body.name;
+  res.json({ msg: "Planet updated" });
+});
+
+router.delete("/api/planets/:id", (req, res) => {
+  const planet = planets.find(
+    (planet) => planet.id === parseInt(req.params.id)
+  );
+  if (!planet) {
+    return res.status(404).json({ msg: "Planet not found" });
+  }
+  const index = planets.indexOf(planet);
+  planets.splice(index, 1);
+  res.json({ msg: "Planet deleted" });
 });
