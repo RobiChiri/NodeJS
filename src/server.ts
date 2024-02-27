@@ -10,7 +10,8 @@ import {
   createImage,
 } from "../controllers/planets";
 
-import { logIn, signUp } from "../controllers/users";
+import { logIn, signUp, logOut } from "../controllers/users";
+import authorize from "./authorize";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -42,6 +43,7 @@ app.post("/api/users/login", logIn);
 
 app.post("/api/users/signup", signUp);
 
+app.get("/api/users/logout", authorize, logOut);
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
